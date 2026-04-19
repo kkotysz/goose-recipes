@@ -1,57 +1,56 @@
 # goose-recipes
 
-This repository contains advanced **Goose agent recipes** for astronomy literature search, in particular for HADS (High-Amplitude Delta Scuti) and SX Phoenicis variable stars.
+A collection of example and advanced recipes for the Goose/AAIF platform.
 
-## Structure
+## Repository Structure
 
-- `hads-sxphe/` – main collection for searching, retrieving, and classifying HADS & SX Phoenicis papers from arXiv:
-    - `recipe.yaml` – main orchestrator recipe (runs subrecipes, deduplicates, ranks, and classifies)
-    - `subrecipes/`
-        - `latest_hads_sxphe.yaml` – recent papers, recall-oriented
-        - `classic_hads_sxphe.yaml` – classic, foundational, and review publications
-        - `comprehensive_hads_sxphe.yaml` – broad, high-recall literature mining
-- `LICENSE` – MIT License
+- Each topic directory contains:
+    - `recipe.yaml`  — main recipe orchestrating a workflow
+    - `subrecipes/` — set of supporting subrecipes for specialized or multi-step actions
+    - other README/config/license files as needed
 
-All recipes make direct use of the [arxiv-mcp-server](https://github.com/aaif-goose/goose-mcp-arxiv), configured as an MCP extension, ensuring high-recall and fast up-to-date literature search.
+Example (this repository iteration):
+- `hads-sxphe/` — a complete orchestrator and subrecipes for searching and analyzing HADS & SX Phoenicis star literature
 
-## MCP arXiv Server: Quick Install
+## Features
+- Recipes compatible with [Goose agent platform](https://github.com/aaif-goose/goose)
+- Supports parameters, subrecipes, deduplication, classification
+- Easy integration with MCP servers (e.g., arxiv-mcp-server for arXiv literature search)
+- Ready to expand with your own topics and workflows
 
-To run recipes locally you need the arxiv MCP server. Install it with:
+## Example Usage
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/kkotysz/goose-recipes.git
+    cd goose-recipes
+    ```
+2. Run a recipe:
+    ```bash
+    goose recipe run DIRECTORY/recipe.yaml
+    ```
+    Replace `DIRECTORY` with any workflow/topic directory, e.g.: `hads-sxphe`
+3. (Optional) Adjust parameters or add your own recipes/subrecipes.
+
+---
+
+## Additional requirement: MCP arXiv Server
+
+Some recipes use the arXiv MCP server. Install it with:
 
 ```bash
 uv tool install 'arxiv-mcp-server[pdf]'
 ```
 
-To check it's working:
+To verify it works:
 ```bash
 arxiv-mcp-server --help
 ```
 
-If you run a recipe via goose CLI/desktop and the extension block is set, goose will launch the server itself using:
+When you run a recipe via goose (CLI/Desktop) with the proper `extensions` block, the server starts automatically. You may also launch it manually if needed:
 
-```
+```bash
 uv tool run arxiv-mcp-server --storage-path /your/path/to/arxiv-papers
 ```
 
-You can adjust `--storage-path` to control the local arXiv cache location.
-
-## Features
-- Recipes compatible with [Goose agent platform](https://github.com/aaif-goose/goose)
-- Parameterized search (limit by date, include/exclude case studies or reviews)
-- Deduplication and classification by arXiv ID and topic relevance
-- Ready for local use, scripting, and expansion
-
-## Example Usage
-1. Clone the repo:
-    ```bash
-    git clone https://github.com/kkotysz/goose-recipes.git
-    cd goose-recipes
-    ```
-2. Run a recipe (replace with your goose CLI invocation):
-    ```bash
-    goose recipe run hads-sxphe/recipe.yaml
-    ```
-3. Optionally, edit parameters or add your own recipes for other star types.
-
 ---
-**MIT License** (c) 2026 Krzysiek
+**MIT License** (c) 2026 krzkot
