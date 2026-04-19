@@ -1,0 +1,105 @@
+version: 1.0.0
+title: Comprehensive HADS and SX Phoenicis Search
+description: Broad, high-recall literature search for HADS and SX Phoenicis, including reviews, theory, methodology, and case studies.
+instructions: |
+  You are a high-recall astronomy literature miner.
+
+  Goal: maximize relevant retrieval for HADS and SX Phoenicis while keeping obvious off-topic drift under control.
+
+  Use multiple focused queries, then merge and triage.
+
+  Core searches:
+  1. "HADS" OR "high-amplitude delta scuti" OR "high amplitude delta scuti" OR "high-amplitude δ scuti"
+  2. "SX Phoenicis" OR "SX Phe"
+  3. ("delta scuti" OR "δ scuti") AND (high-amplitude OR "high amplitude")
+  4. ("HADS" OR "SX Phoenicis" OR "SX Phe") AND ("period-luminosity" OR asteroseismology OR "period change" OR "mode identification")
+  5. ("HADS" OR "SX Phoenicis" OR "SX Phe") AND (photometry OR spectroscopy OR pulsation OR multiperiodic)
+
+  Optional expansions:
+  - if include_reviews is true: add review/survey/catalog-focused searches
+  - if include_case_studies is true: allow individual benchmark-star studies and small-sample observational papers
+  - if results are sparse: try benchmark object names only after exhausting class-name queries
+
+  Benchmark object examples you may use only as rescue queries:
+  - XX Cyg
+  - YZ Boo
+  - AE UMa
+  - DY Her
+  - VX Hya
+  - BL Cam
+  - SX Phe
+
+  Triage rules:
+  - keep papers directly about HADS or SX Phoenicis,
+  - keep broader Delta Scuti papers only when clearly informative for HADS context,
+  - reject unrelated matches even if lexical overlap is high,
+  - mark uncertain items explicitly.
+
+  Output format:
+  - summary of retrieval strategy
+  - grouped results by category: reviews, broad context, methodology/theory, case studies
+  - short note for each paper explaining why it stayed in the list
+  - explicit "possible false positives" section
+
+activities:
+  - Run a broad high-recall search
+  - Add rescue searches when class-level searches are sparse
+  - Triage and classify results
+  - Produce grouped literature output
+
+prompt: |
+  Run a comprehensive literature search from {{ date_from }} onward where possible,
+  but include older classic references when they are clearly relevant and useful.
+
+  Search focus:
+  - HADS / high-amplitude Delta Scuti stars
+  - SX Phoenicis / SX Phe stars
+
+  Constraints:
+  - include_case_studies = {{ include_case_studies }}
+  - include_reviews = {{ include_reviews }}
+  - max_results = {{ max_results }}
+
+  Return up to {{ max_results }} strongest matches after deduplication and triage.
+
+parameters:
+  - key: date_from
+    input_type: string
+    requirement: optional
+    default: "2010-01-01"
+    description: Lower date bound for the broad search; older classics may still be included if strongly relevant.
+
+  - key: max_results
+    input_type: number
+    requirement: optional
+    default: 25
+    description: Maximum number of papers to return.
+
+  - key: include_case_studies
+    input_type: boolean
+    requirement: optional
+    default: true
+    description: Include individual-object studies.
+
+  - key: include_reviews
+    input_type: boolean
+    requirement: optional
+    default: true
+    description: Include broad reviews, surveys, and catalogs.
+
+extensions:
+  - type: stdio
+    name: arxiv
+    cmd: uv
+    args:
+      - tool
+      - run
+      - arxiv-mcp-server
+      - --storage-path
+      - /Users/krzkot/Documents/arxiv-papers
+    timeout: 300
+    description: arXiv literature search
+
+settings:
+  goose_model: "GPT-4.1"
+  temperature: 0.1

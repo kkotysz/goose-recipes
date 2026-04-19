@@ -1,0 +1,103 @@
+version: 1.0.0
+title: HADS + SX Phoenicis Literature Suite
+description: Orchestrate latest, classic, and comprehensive literature searches for HADS and SX Phoenicis papers.
+instructions: |
+  You are a literature-research orchestrator specializing in pulsating stars.
+
+  Run the available subrecipes and then synthesize one final report.
+  Prefer high recall, but keep the final output clean and deduplicated.
+
+  After the subrecipes finish:
+  1. merge the returned paper lists,
+  2. remove duplicates by arXiv id first, then by title,
+  3. classify each paper as one of: review, survey/catalog, methodology, theory, case study, population/statistics,
+  4. label each paper as HADS, SX Phoenicis, both, or broader Delta Scuti context,
+  5. clearly mark uncertain matches,
+  6. produce a final ranked reading list.
+
+  In the final answer, include these sections:
+  - Latest papers
+  - Classic / foundational papers
+  - Broad high-recall matches
+  - Recommended reading order
+  - Search gaps / caveats
+
+activities:
+  - Run specialized literature-search subrecipes
+  - Merge and deduplicate results
+  - Classify papers by topic and paper type
+  - Produce one final reading list
+
+prompt: |
+  Run the subrecipes in parallel where possible, then synthesize the outputs.
+
+  Search focus:
+  - HADS / high-amplitude Delta Scuti stars
+  - SX Phoenicis / SX Phe stars
+  - both case studies and broader reviews/surveys
+
+  User preferences:
+  - include_case_studies = {{ include_case_studies }}
+  - include_reviews = {{ include_reviews }}
+  - max_results_per_track = {{ max_results_per_track }}
+  - latest_date_from = {{ latest_date_from }}
+  - comprehensive_date_from = {{ comprehensive_date_from }}
+
+sub_recipes:
+  - name: latest-track
+    path: "./subrecipes/latest_hads_sxphe.yaml"
+    values:
+      date_from: "{{ latest_date_from }}"
+      max_results: "{{ max_results_per_track }}"
+      include_case_studies: "{{ include_case_studies }}"
+      include_reviews: "{{ include_reviews }}"
+
+  - name: classic-track
+    path: "./subrecipes/classic_hads_sxphe.yaml"
+    values:
+      max_results: "{{ max_results_per_track }}"
+      include_case_studies: "{{ include_case_studies }}"
+      include_reviews: "{{ include_reviews }}"
+
+  - name: comprehensive-track
+    path: "./subrecipes/comprehensive_hads_sxphe.yaml"
+    values:
+      date_from: "{{ comprehensive_date_from }}"
+      max_results: "{{ max_results_per_track }}"
+      include_case_studies: "{{ include_case_studies }}"
+      include_reviews: "{{ include_reviews }}"
+
+parameters:
+  - key: max_results_per_track
+    input_type: number
+    requirement: optional
+    default: 12
+    description: Maximum number of papers each track should try to return.
+
+  - key: latest_date_from
+    input_type: string
+    requirement: optional
+    default: "2023-01-01"
+    description: Lower date bound for the latest-paper search.
+
+  - key: comprehensive_date_from
+    input_type: string
+    requirement: optional
+    default: "2010-01-01"
+    description: Lower date bound for the broad high-recall search.
+
+  - key: include_case_studies
+    input_type: boolean
+    requirement: optional
+    default: true
+    description: Whether searches should include individual-star case studies.
+
+  - key: include_reviews
+    input_type: boolean
+    requirement: optional
+    default: true
+    description: Whether searches should explicitly look for review/survey/foundational papers.
+
+settings:
+  goose_model: "GPT-4.1"
+  temperature: 0.1
