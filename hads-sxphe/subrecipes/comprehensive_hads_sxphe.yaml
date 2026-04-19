@@ -1,4 +1,4 @@
-version: 1.0.0
+version: "1.0.0"
 title: Comprehensive HADS and SX Phoenicis Search
 description: Broad, high-recall literature search for HADS and SX Phoenicis, including reviews, theory, methodology, and case studies.
 instructions: |
@@ -41,11 +41,7 @@ instructions: |
   - short note for each paper explaining why it stayed in the list
   - explicit "possible false positives" section
 
-activities:
-  - Run a broad high-recall search
-  - Add rescue searches when class-level searches are sparse
-  - Triage and classify results
-  - Produce grouped literature output
+  For each paper, include title, year, arXiv id if available, classification, relevance label, and a one-sentence reason for inclusion.
 
 prompt: |
   Run a comprehensive literature search from {{ date_from }} onward where possible,
@@ -99,7 +95,3 @@ extensions:
       - /Users/krzkot/Documents/arxiv-papers
     timeout: 300
     description: arXiv literature search
-
-settings:
-  goose_model: "GPT-4.1"
-  temperature: 0.1

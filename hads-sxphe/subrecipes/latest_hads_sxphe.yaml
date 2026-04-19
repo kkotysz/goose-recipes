@@ -1,4 +1,4 @@
-version: 1.0.0
+version: "1.0.0"
 title: Latest HADS and SX Phoenicis Papers
 description: Find the newest relevant arXiv papers on HADS and SX Phoenicis with good recall and minimal topic drift.
 instructions: |
@@ -24,11 +24,7 @@ instructions: |
   - table-like list with: title, year, class, why relevant
   - separate section for ambiguous matches
 
-activities:
-  - Search arXiv using layered queries
-  - Filter irrelevant matches
-  - Deduplicate results
-  - Return latest relevant papers
+  For each paper, include title, year, arXiv id if available, classification, relevance label, and a one-sentence reason for inclusion.
 
 prompt: |
   Find the newest relevant papers from {{ date_from }} onward.
@@ -82,7 +78,3 @@ extensions:
       - /Users/krzkot/Documents/arxiv-papers
     timeout: 300
     description: arXiv literature search
-
-settings:
-  goose_model: "GPT-4.1"
-  temperature: 0.1

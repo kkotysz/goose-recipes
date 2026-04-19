@@ -1,4 +1,4 @@
-version: 1.0.0
+version: "1.0.0"
 title: HADS + SX Phoenicis Literature Suite
 description: Orchestrate latest, classic, and comprehensive literature searches for HADS and SX Phoenicis papers.
 instructions: |
@@ -22,20 +22,14 @@ instructions: |
   - Recommended reading order
   - Search gaps / caveats
 
-activities:
-  - Run specialized literature-search subrecipes
-  - Merge and deduplicate results
-  - Classify papers by topic and paper type
-  - Produce one final reading list
+  For each paper, include title, year, arXiv id if available, classification, relevance label, and a one-sentence reason for inclusion.
 
 prompt: |
-  Run the subrecipes in parallel where possible, then synthesize the outputs.
-
+  Run all three subrecipes in parallel, unless a dependency requires sequential execution, then synthesize the outputs.
   Search focus:
   - HADS / high-amplitude Delta Scuti stars
   - SX Phoenicis / SX Phe stars
   - both case studies and broader reviews/surveys
-
   User preferences:
   - include_case_studies = {{ include_case_studies }}
   - include_reviews = {{ include_reviews }}
@@ -97,7 +91,3 @@ parameters:
     requirement: optional
     default: true
     description: Whether searches should explicitly look for review/survey/foundational papers.
-
-settings:
-  goose_model: "GPT-4.1"
-  temperature: 0.1

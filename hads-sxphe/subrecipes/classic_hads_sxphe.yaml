@@ -1,4 +1,4 @@
-version: 1.0.0
+version: "1.0.0"
 title: Classic HADS and SX Phoenicis Papers
 description: Find foundational, review, and historically important papers on HADS and SX Phoenicis.
 instructions: |
@@ -25,11 +25,7 @@ instructions: |
   - a ranked reading list with title, year, category, and relevance note
   - a short "start here" subset of 5 papers
 
-activities:
-  - Search for classic and foundational literature
-  - Identify reviews and benchmark references
-  - Separate broad papers from case studies
-  - Recommend a starter reading path
+  For each paper, include title, year, arXiv id if available, classification, relevance label, and a one-sentence reason for inclusion.
 
 prompt: |
   Find classic and foundational literature on:
@@ -75,7 +71,3 @@ extensions:
       - /Users/krzkot/Documents/arxiv-papers
     timeout: 300
     description: arXiv literature search
-
-settings:
-  goose_model: "GPT-4.1"
-  temperature: 0.1
